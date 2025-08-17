@@ -1,0 +1,13 @@
+[Unit]
+Description=VirtualHere Printer Auto-Connect Service
+After=network.target
+Before=ipp-usb.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+EnvironmentFile=/etc/environment
+ExecStart=/usr/local/bin/connect_printer.sh
+
+[Install]
+WantedBy=multi-user.target

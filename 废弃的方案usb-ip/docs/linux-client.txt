@@ -1,0 +1,483 @@
+Skip to main content
+Home
+Main navigation
+Home
+USB Servers
+Client
+Hardware
+KVM/IP
+Purchase
+Support
+Contact
+Search
+
+User account menu
+Log in
+Breadcrumb
+Home
+Forums
+VirtualHere Forums
+Support
+Linux Console Client
+Submitted by Michael on Mon, 2014/12/01 - 23:02 #1
+The VirtualHere USB Client Console Edition can now run as a console only daemon in most Linux editions (including Android). It is a 100% static binary therefore it requires no runtime libraries, other than usbip drivers compiled into your Linux setup. usbip drivers are included in the Linux mainline so they are easy to compile with the Linux/Android kernel make command.
+
+The client will interact with the usbip drivers in the Kernel to provide remote USB capabilities.
+
+Running the Linux Client in the console is usually a two step process.
+
+Step 1. Start the Client as a daemon so that it runs in the background using the -n flag. You can move it into an init.d script so it runs on startup as a daemon
+Step 2. Run the client again and this time use the -t argument to control the daemon
+
+Note: when running the client as a daemon (step 1) the VirtualHere Server it connects to must be purchased
+
+© VirtualHere Pty. Ltd. 2010-2025, Australian Business Number: 12168518796, Made in Australia (Privacy Policy)
+
+Skip to main content
+Home
+Main navigation
+Home
+USB Servers
+Client
+Hardware
+KVM/IP
+Purchase
+Support
+Contact
+Search
+
+User account menu
+Log in
+Breadcrumb
+Home
+Forums
+VirtualHere Forums
+Support
+Running the Client as a Background Service (Daemon)
+Submitted by Michael on Fri, 2014/02/21 - 11:21 #1
+The VirtualHere USB Client can run either as a normal application or as a background service. Running the client as a background service enables devices to be shared while requiring no user to be logged in. This makes it easy to remotely interact with USB devices, and once setup can be a background set-and-forget type system. Users can log in/out and the VirtualHere client will remain running in the background uninterrupted.
+
+When the VirtualHere USB Client is installed as a background service it will automatically start up when the operating system boots, and will automatically connect to any devices you have specified.. The message log can be viewed in the Event Viewer (under Windows), Console Viewer (under OSX), or tail /var/log/syslog (under Linux).
+
+THE VIRTUALHERE USB SERVER MUST BE PURCHASED TO USE THIS FEATURE
+
+To install the Virtualhere USB client as a service in Windows or OSX
+
+Right click USB Hubs->Install Client as a Sevice(If the service is already installed, this option will be Uninstall Client Service instead)
+The client as a service will be installed.
+Start the client again and it will communicate with the running service in the background.
+You can exit the client and the client service will continue to run as normal in the background
+To install the VirtualHere USB client as a daemon in Linux:
+
+Firstly you should use the VirtualHere USB Client Console edition. Then run the client with the -n option. This will start it in daemon mode
+
+E.g: to run the client in the background under linux use sudo like this:sudo ./vhclientx86_64 -n
+
+To interact/control the daemon no need to use sudo just run e.g ./vhclientx86_64 -t "HELP" on the command line for available commands
+
+To start the client on boot:
+
+wget https://www.virtualhere.com/sites/default/files/usbclient/scripts/virtualhereclient.service
+wget https://www.virtualhere.com/sites/default/files/usbclient/vhclientx86_64
+chmod +x ./vhclientx86_64
+sudo mv ./vhclientx86_64 /usr/sbin
+sudo mv virtualhereclient.service /etc/systemd/system/virtualhereclient.service
+systemctl daemon-reload
+systemctl enable virtualhereclient.service
+systemctl start virtualhereclient.service
+Then you can control it like this e.g
+
+/usr/sbin/vhclientx86_64 -t "LIST"
+/usr/sbin/vhclientx86_64 -t "USE,...etc"
+
+© VirtualHere Pty. Ltd. 2010-2025, Australian Business Number: 12168518796, Made in Australia (Privacy Policy)
+
+Skip to main content
+Home
+Main navigation
+Home
+USB Servers
+Client
+Hardware
+KVM/IP
+Purchase
+Support
+Contact
+Search
+
+User account menu
+Log in
+Breadcrumb
+Home
+Forums
+VirtualHere Forums
+Support
+Client API
+Submitted by Michael on Tue, 2014/03/04 - 00:12 #1
+The VirtualHere USB Client can be controlled by another program or on the command line. This is useful when:
+
+You want to control the VirtualHere Client when running as a service
+You want to control the client via a console only session e.g. ssh
+You want to build a custom graphical interface to VirtualHere via a programming language of your choice
+You would like to control VirtualHere inside a batch file (Windows) or bash (OSX/Linux) script
+When the VirtualHere USB Client runs as a service or application it is controllable over a Named pipe. The named pipe is called \\.\pipe\vhclient (for requests and responses) in Windows, and /tmp/vhclient (for requests) and /tmp/vhclient_response (for responses) in OSX and Linux. You can use any program language or even just the command prompt to control the client, no special dll or language bindings are required! A named pipe is just like a normal file. To contol the client the named pipe needs to be opened and sent a text string in the format <verb>[,arg] followed by a newline character. The client will perform the action corresponding to the verb specified and will return a response string in the response pipe. You can even use the VirtualHere client binary itself to send commands to another instance of the client via the -t parameter, so you dont have to bother writing your own pipe reader/writer
+
+Windows does not have the concept of a console like in POSIX systems(Linux/OSX) for redirection, so if you are calling vhui from a Windows batch file you should use the -r argument with a filename to return the result and parse that (see below).
+
+Anyone can use the API, no special SDK or program library needed!
+
+Run the client with the argument -t HELP to get the list of available commands, e.g
+
+C:\Users\msbro>vhui64.exe -t help
+
+VirtualHere Client (v5.2.0) API commands (<> = required, [] = optional, | = OR):
+
+List devices:
+    "LIST"
+Get the detailed full client state as an XML Document:
+    GET CLIENT STATE
+Use a device:
+    "USE,<address>[,password]"
+Stop using a device:
+    "STOP USING,<address>"
+Stop using all devices on all clients:
+    "STOP USING ALL[,<address>[:port] | <EasyFind address>]"
+Stop using all devices just for this client:
+    "STOP USING ALL LOCAL"
+Device Information:
+    "DEVICE INFO,<address>"
+Server Information:
+    "SERVER INFO,<server name>"
+Set device nickname:
+    "DEVICE RENAME,<address>,<nickname>"
+Rename server:
+    "SERVER RENAME,<hubaddress:port>,<new name>"
+Turn auto-use all devices on:
+    "AUTO USE ALL"
+Turn Auto-use all devices on this hub on/off:
+    "AUTO USE HUB,<server name>"
+Turn Auto-use any device on this port on/off:
+    "AUTO USE PORT,<address>"
+Turn Auto-use this device on any port on/off:
+    "AUTO USE DEVICE,<address>"
+Turn Auto-use this device on this port on/off:
+    "AUTO USE DEVICE PORT,<address>"
+Clear all auto-use settings:
+    "AUTO USE CLEAR ALL"
+Specify server to connect to:
+    "MANUAL HUB ADD,<address>[:port] | <EasyFind address>"
+Remove a manually specified hub:
+    "MANUAL HUB REMOVE,<address>[:port] | <EasyFind address>"
+Remove all manually specified hubs:
+    "MANUAL HUB REMOVE ALL"
+Add a reverse client to the server:
+    "ADD REVERSE,<server serial>,<client address[:port]>"
+Remove a reverse client from the server:
+    "REMOVE REVERSE,<server serial>,<client address[:port]>"
+List all reverse clients:
+    "LIST REVERSE,<server serial>"
+List manually specified hubs:
+    "MANUAL HUB LIST"
+List licenses:
+    "LIST LICENSES"
+License server:
+    "LICENSE SERVER,<license key>"
+Clear client log:
+    "CLEAR LOG"
+Set a custom device event:
+    "CUSTOM EVENT,<address>,<event>"
+Turn auto-find off:
+    "AUTOFIND"
+Turn reverse lookup off:
+    "REVERSE"
+Turn reverse SSL lookup on:
+    "SSLREVERSE"
+Shutdown the client:
+    "EXIT"
+Help:
+    "HELP"
+
+E.g: To get a list of devices, vhui64.exe -t "LIST"
+E.g: Use a device, vhui64.exe -t "USE,QNAP.114"
+When a command succeeds it will return "OK" and 0 will be returned to the shell, if a command fails it will return "FAILED" and 1 will be returned to the shell (e.g trying to use an in-use device), or "ERROR: error string" and 2 will be returned to the shell (e.g if the server doesnt exist or the address is invalid). Note that there is a 5 second timeout to the response. If the api call takes more than 5 seconds it will return FAILED regardless.
+
+For example in Windows:
+
+Make sure the client is already running either normally as an application (visible as a blue USB icon in the taskbar) or as a background service. We will use the VirtualHere binary itself as the named pipe client to issue commands to the running instance. You need to wrap the command in quotes " because windows will misinterpret commands with spaces. First change to the directory with the VirtualHere client binary is then type vhui64.exe -t "LIST". That will send the LIST command to the running client. It will return something similar to the following:
+
+C:\Users\michael>vhui64.exe -t list
+VirtualHere IPC, below are the available devices:
+(Value in brackets = address, * = Auto-Use)
+
+Raspberry Hub (raspberrypi:7575)
+   --> Ultra USB 3.0 (raspberrypi.114)
+QNAP Hub (QNAP:7575)
+   --> ADATA USB Flash (QNAP.22)
+   --> STORE N GO (QNAP.11)
+Synology Hub (synology:17570)
+   --> eLicenser (synology.1134)
+   --> WIBU-BOX/U (synology.1144)
+   --> FT230X Basic UART (synology.1141)
+   --> Extreme (synology.1132)
+   --> CP2102 USB to UART Bridge Controller (synology.1114)
+ASUSTOR Hub (ASUS:7575)
+ReadyNAS Hub (readynas:7575)
+   --> ASMT1051 (readynas.32)
+   --> STORE N GO (readynas.11)
+
+Auto-Find currently on
+Auto-Use All currently off
+Reverse Lookup currently off
+VirtualHere not running as a service
+
+C:\Users\michael>
+From this output you can see the client is attached to five USB servers Raspberry Hub at the host raspberrypi:7575, QNAP Hub at host QNAP:7575 etc... and for example, the Synology Hub has 5 devices attached.
+
+For example the USB stick "STORE N GO" attached to the ReadyNAS hub is at address readynas.11, to use this type vhui64.exe -t "USE,readynas.11", and an OK will be returned to the console.
+
+To stop using the USB stick type: vhui64.exe -t "STOP USING,readynas.11"
+
+To automatically auto-use any device plugged into the Readynas Hub type vhui64.exe -t "AUTO USE HUB,readynas:7575"
+
+A Windows batch file example
+
+This example will show how to correctly parse the result of an IPC command inside a windows batch file. We use the -r argument to redirect the result to a file and then we load the file into the variable RS. It is done this way because Windows doesn't support error codes like linux/osx does.
+Firstly run the following batch file without having another client instance running,it will return "IPC ERROR" because there is no client to communicate with. Start a vhui64.exe instance then run the batch file again and it will return "IPC OK, do stuff with result in RS".
+
+@echo off
+vhui64.exe -t LIST -r out.txt
+set /p RS=<out.txt
+IF "%RS:~0,6%"=="FAILED" (
+  ECHO "IPC failed"
+) ELSE (
+  IF "%RS:~0,5%"=="ERROR" (
+    ECHO "IPC ERROR"
+  ) ELSE (
+    ECHO "IPC OK, do stuff with result in RS"
+  )
+)
+Another Windows batch file example
+
+When vhui64.exe is running as a service or in the gui in Windows...
+
+vhui64.exe -t "LIST" -r "out.txt"
+FOR /F "tokens=*" %%i IN (out.txt) DO @ECHO %%i
+
+The for loop reads each line in the output (out.txt) and echos it to the script as an example. You can change the "ECHO" command to do something useful, for example to parse the "LIST" argument
+
+Powershell 5 Example
+
+$pipeClient = new-object System.IO.Pipes.NamedPipeClientStream("vhclient")
+$pipeClient.Connect()
+$pipeClient.ReadMode = [System.IO.Pipes.PipeTransmissionMode]::Message
+$writer = new-object System.IO.StreamWriter($pipeClient)
+$writer.AutoFlush = $true
+$writer.Write("LIST")
+$reader = new-object System.IO.StreamReader($pipeClient)
+$bytes = New-Object System.Collections.Generic.List[byte]
+while ($reader.Peek() -ne -1)
+{
+  $bytes.Add($reader.Read())
+}
+$result = [System.Text.Encoding]::UTF8.GetString($bytes)
+Powershell 7 Example (There is a bug in Peek() in PS 7)
+
+$f = @'
+[DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)] public static extern bool ReadFile(IntPtr handle, byte[] buffer, int bufferLen, out int read, IntPtr overlapped);
+[DllImport("Kernel32.dll")] public static extern uint GetLastError();
+'@
+$kernel32 = Add-Type -memberDefinition $f -name "kernel32" -namespace Win32Functions -passThru
+$pipeClient = new-object System.IO.Pipes.NamedPipeClientStream("vhclient")
+$pipeClient.Connect()
+$pipeClient.ReadMode = [System.IO.Pipes.PipeTransmissionMode]::Message
+$writer = new-object System.IO.StreamWriter($pipeClient)
+$writer.AutoFlush = $true
+$writer.Write("LIST")
+$bytes = New-Object System.Collections.Generic.List[byte]
+while (1)
+{
+  $buffer = [byte[]]::new(4096)
+  $bytesRead = 0
+  if ($kernel32::ReadFile($pipeClient.SafePipeHandle.DangerousGetHandle(), $buffer, $buffer.Length, [ref]$bytesRead, [IntPtr]::Zero))
+  {
+    $bytes += $buffer[0..$bytesRead];
+    break;
+  }
+  else
+  {
+    if ($kernel32::GetLastError() -eq 234) # ERROR_MORE_DATA
+    {
+      $bytes += $buffer[0..$bytesRead];
+    }
+    else
+    {
+      $bytes += $buffer[0..$bytesRead];
+      break;
+    }
+  }
+}
+$result = [System.Text.Encoding]::UTF8.GetString($bytes)
+Write-Output $result
+ 
+C++ example in Windows
+
+Here is some example C++ code for Windows (also using wxWidgets) that will communicate with a running instance of the VirtualHere Client
+
+#define IPCPATH "\\\\.\\pipe\\vhclient"
+
+bool WindowsIPCClient::issueIPCCommand(const wxString& request, wxString& response, bool silent)
+{
+  response = "";
+  bool result = true;
+  wxMessageOutputBest consoleLog;
+  HANDLE hPipe;
+  while (true)
+  {
+    hPipe = CreateFile(TEXT(IPC_PATH), GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+    if (hPipe != INVALID_HANDLE_VALUE)
+    {
+      break; // ok we opened pipe as a client
+    }
+    if (GetLastError() == ERROR_PIPE_BUSY) // pipe is busy try again for 2 seconds
+    {
+      if (!WaitNamedPipe(TEXT(IPC_PATH), 2000))
+      {
+        if (!silent)
+        {
+          consoleLog.Printf("IPC client WaitNamedPipe, error timeout");
+        }
+        result = false;
+        break;
+      }
+    }
+    else
+    {
+      if (!silent)
+      {
+        consoleLog.Printf("IPC client CreateFile failed, error %lu (%s)", wxSysErrorCode(), wxSysErrorMsg(wxSysErrorCode()));
+      }
+      result = false;
+      break;
+    }
+  }
+  if (result) // if we have a valid pipe
+  {
+    DWORD dwMode = PIPE_READMODE_MESSAGE;
+    if (SetNamedPipeHandleState(hPipe, &dwMode, NULL, NULL))
+    {
+      DWORD bytesWritten;
+      BOOL fSuccess = WriteFile(hPipe, request.c_str(), request.Length(), &bytesWritten, NULL); // * NOTE: DO NOT PASS NULL TERMINATOR *
+      if (fSuccess)
+      {
+        DWORD bytesRead;
+        char buffer[BUFFER_SIZE] = { 0 };
+        fSuccess = ReadFile(hPipe, buffer, BUFFER_SIZE, &bytesRead, NULL);
+        if (!fSuccess)
+        {
+          if (!silent)
+          {
+            consoleLog.Printf("IPC client ReadFile failed, error %lu (%s)", wxSysErrorCode(), wxSysErrorMsg(wxSysErrorCode()));
+          }
+          result = false;
+        }
+        else
+        {
+          response.Append(buffer);
+        }
+      }
+      else
+      {
+        if (!silent)
+        {
+          consoleLog.Printf("IPC client WriteFile failed, error %lu (%s)", wxSysErrorCode(), wxSysErrorMsg(wxSysErrorCode()));
+        }
+        result = false;
+      }
+    }
+    else
+    {
+      if (!silent)
+      {
+        consoleLog.Printf("IPC client SetNamedPipeHandleState failed, error %lu (%s)", wxSysErrorCode(), wxSysErrorMsg(wxSysErrorCode()));
+      }
+      result = false;
+    }
+    CloseHandle(hPipe);
+  }
+  return result;
+}
+C# example (Thanks to user ppatel)
+
+       private async void VhUIClientPipe()     //Simple
+        {
+            using (NamedPipeClientStream pipeClient = new NamedPipeClientStream(".", "vhclient", PipeDirection.InOut))
+            {
+                Console.Write("Attempting to connect to pipe...");
+                await pipeClient.ConnectAsync(2000);
+
+                Console.WriteLine("Connected to pipe.");
+                Console.WriteLine("There are currently {0} pipe server instances open.", pipeClient.NumberOfServerInstances);
+
+                using (StreamWriter sw = new StreamWriter(pipeClient))
+                {
+                    sw.AutoFlush = true;
+                    string temp;                    
+
+                    string CMDList = "LIST";
+                    char[] WriteCMD = CMDList.ToCharArray();
+
+                    //string GET_CLIENT_STATE = "GET CLIENT STATE";       
+                    //char[] WriteCMD = GET_CLIENT_STATE.ToCharArray();
+
+                    using (StreamReader sr = new StreamReader(pipeClient))
+                    {
+                        sw.Write(WriteCMD);
+                        while ((temp = sr.ReadLine()) != null)
+                        {
+                            Console.WriteLine("Received from server: {0}", temp);
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+
+
+        //Call it in function:
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Task.Run(()=>VhUIClientPipe());
+        }
+Python (Thanks to user mmagill)
+
+https://www.virtualhere.com/comment/7610#comment-7610
+
+Client-side Events
+Calls to a windows batch file or bash script can be made by the client on certain events. These events are set by right clicking on the device in the virtualhere client and selecting "Custom Event Handler..."
+
+onClientBeforeBind - occurs just before a remote device is bound to the client
+onClientAfterBind - just after...
+onClientBeforeUnbind - just before a remote device is UNbound from the client
+onClientAfterUnbind - just after...
+
+ 
+
+Events are qualified by the device vendor id,product or and optionally the server usb port
+
+For example in Windows, say you wanted to bring up the printer dialog when a particular printer is connected via VirtualHere. In the VirtualHere client, right click on the Printer and select "Custom Event Handler..." then enter exactly this:
+
+onClientAfterBind.$VENDOR_ID$.$PRODUCT_ID$=control printers
+
+and click OK. The client will replace the $VENDOR_ID$ and $PRODUCT_ID$ with the actual USB vendor and product id of the printer and save this event permanently. Now when you right click on the Printer in the VirtualHere client and select "Use" - after the remote printer has bound to the local client the batch file start "control printers" will be run. The client will wait for the script to exit so you should use the start windows command to run it in the background.
+
+If you would like to run the event batch file with elevated privileges in Windows just include the $ELEVATE$at the beginning of the entry, the string will be removed by the client before execution as an administrator e.g
+
+onClientAfterBind.$VENDOR_ID$.$PRODUCT_ID$=$ELEVATE$control printers
+
+To remove a custom client event handler, enter the special value REMOVE like this for example:
+
+onClientAfterBind.$VENDOR_ID$.$PRODUCT_ID$=REMOVE
+
+© VirtualHere Pty. Ltd. 2010-2025, Australian Business Number: 12168518796, Made in Australia (Privacy Policy)

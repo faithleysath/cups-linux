@@ -1,0 +1,9 @@
+[Unit]
+Description=Daemon for IPP over USB printer support
+After=vh-connect.service
+Requires=vh-connect.service
+
+[Service]
+ExecStart=/usr/sbin/ipp-usb
+[Install]
+WantedBy=multi-user.target

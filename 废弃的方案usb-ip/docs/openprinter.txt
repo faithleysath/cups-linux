@@ -1,0 +1,32 @@
+
+OpenPrintingNews and EventsProjectsDownloadsDriverlessDatabasePrintersDriversContact UsDonations
+OpenPrinting Printers HP LaserJet M1005 MFP
+
+ 	
+HP LaserJet M1005 MFP	
+ 	
+Black & White laser printer, max. 600x600 dpi, works Mostly		
+Recommended Driver: foo2xqx (Home page)	
+Generic Instructions: CUPS, no spooler	
+ 	
+Comments
+This printer is supported by the foo2xqx free software printer driver.
+
+Consumables/Refills: Cartridge containing toner and imaging drum
+
+Drivers
+The following driver(s) are known to drive this printer:
+
+Recommended driver:
+
+ 	
+foo2xqx  (driver home page)	
+ 	
+This driver is free software.
+Type: Filter	
+ 	
+  
+
+Copyright 2013 Linux Foundation. All rights reserved.
+LSB is a trademark of the Linux Foundation. Linux is a registered trademark of Linus Torvalds.
+Please see our privacy policy.

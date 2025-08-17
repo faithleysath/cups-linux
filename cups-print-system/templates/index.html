@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>轻量级云打印</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>轻量级云打印系统</h1>
+            <p>通过网页上传文件，在服务器端完成打印，无需安装驱动。</p>
+        </header>
+        
+        <main>
+            <form id="printForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="file">1. 选择文件</label>
+                    <input type="file" id="file" name="file" required>
+                    <small>支持 PDF, Word, JPG, PNG 等格式，最大 16MB。</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="printer">2. 选择打印机</label>
+                    <select id="printer" name="printer" required>
+                        <option value="">正在加载打印机...</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="copies">3. 设置打印份数</label>
+                    <input type="number" id="copies" name="copies" value="1" min="1" max="100">
+                </div>
+                
+                <button type="submit" id="submitBtn">提交打印</button>
+            </form>
+            
+            <div id="status" class="status-container">
+                <!-- 打印状态将在这里显示 -->
+            </div>
+        </main>
+        
+        <footer>
+            <p>CUPS Web Print Service</p>
+        </footer>
+    </div>
+    
+    <script src="/static/js/script.js"></script>
+</body>
+</html>

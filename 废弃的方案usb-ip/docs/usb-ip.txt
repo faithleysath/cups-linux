@@ -1,0 +1,122 @@
+Skip to content
+Navigation Menu
+apple
+containerization
+ 
+Type / to search
+Code
+Issues
+23
+Pull requests
+11
+Actions
+Security
+Insights
+USB support via USB/IP #74
+Open
+Feature
+@beriberikix
+Description
+beriberikix
+opened on Jun 10
+Being able to interact with devices like controllers, music equipment & IoT devices is important to many developers while using containers. While some container environments have native support for USB passthrough (really only on Linux hosts,) the more common approach is utilizing USB/IP. USB/IP has been in the Linux kernel for years and is used by Windows in WSL2 and Docker Desktop.
+
+I propose enabling the kernel modules and standard USB drivers that'll be useful to most developers.
+
+macOS lacks a complete USB/IP server implementation (I wrote about here) but we do have workarounds in the meantime.
+
+True USB passthrough would be ideal but to my knowledge the underlying virtualization framework does not support it so USB/IP is likely the only option for the time being.
+Activity
+
+crosbymichael
+added 
+enhancement
+ on Jun 11
+
+cfergeau
+mentioned this on Jun 11
+
+Support usb passthrough? apple/container#133
+
+tisba
+mentioned this on Jun 19
+
+USB device passthrough orbstack/orbstack#43
+
+dcantah
+added the
+Feature
+issue type on Jun 26
+
+dcantah
+removed 
+enhancement
+ on Jun 26
+
+crosbymichael
+self-assigned thison Jul 1
+mer0o
+mer0o commented on Jul 5
+mer0o
+on Jul 5
+Making this happen will be amazingg 🤞🏽
+mer0o
+mer0o commented on Jul 6
+mer0o
+on Jul 6 · edited by mer0o
+Shouldn't native passthrough be possible through Apple virtualisation framework's USB Devices here, or is this a different use case?
+beriberikix
+beriberikix commented on Jul 12
+beriberikix
+on Jul 12
+Author
+I have limited experience with the VM APIs but I believe that USB support is limited and the primary use case is for mass storage devices. But I could be mistaken.
+savvn001
+savvn001 commented last month
+savvn001
+last month
++1 would be great to see this added!
+faithleysath
+Add a comment
+new Comment
+Markdown input: edit mode selected.
+Write
+Preview
+
+Remember, contributions to this repository should follow its contributing guidelines, security policy and code of conduct.
+Metadata
+Assignees
+Labels
+No labels
+Type
+Feature
+Projects
+No projects
+Milestone
+No milestone
+Relationships
+None yet
+Development
+No branches or pull requests
+NotificationsCustomize
+You're not receiving notifications from this thread.
+
+Participants
+@beriberikix
+@crosbymichael
+@savvn001
+@dcantah
+@mer0o
+Issue actions
+Footer
+© 2025 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+Manage cookies
+Do not share my personal information
+USB support via USB/IP · Issue #74 · apple/containerization

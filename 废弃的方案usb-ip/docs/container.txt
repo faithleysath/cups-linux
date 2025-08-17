@@ -1,0 +1,228 @@
+Skip to content
+Navigation Menu
+apple
+container
+ 
+Type / to search
+Code
+Issues
+130
+Pull requests
+12
+Discussions
+Actions
+Projects
+Security
+Insights
+Owner avatar
+container
+Public
+apple/container
+
+t
+Add file
+Folders and files
+Name		
+Latest commit
+Reneechang17
+Reneechang17
+Fix SSH forwarding for exec process (#506)
+3349a90
+ · 
+14 hours ago
+History
+.github
+Select alternate data path with `container system start --app-root pa…
+last week
+Sources
+Fix SSH forwarding for exec process (#506)
+14 hours ago
+Tests
+Preserve permissions by default and fix warnings (#496)
+3 days ago
+config
+Initial commit
+2 months ago
+docs
+Adds how-to section for --ssh. (#503)
+16 hours ago
+scripts
+Use swift package edit instead of CONTAINERIZATION_PATH. (#318)
+last month
+signing
+Initial commit
+2 months ago
+.gitignore
+Remove editor specific git ignore rules (#197)
+2 months ago
+.spi.yml
+Updates SPI manifest to build on 6.2 only. (#297)
+last month
+.swift-format
+Initial commit
+2 months ago
+BUILDING.md
+Explain how to install a release build in BUILDING.md (#379)
+3 weeks ago
+CONTRIBUTING.md
+Remove local CoC and MD updates (#29)
+2 months ago
+CONTRIBUTORS.txt
+docs: add initial contributors file (#48)
+2 months ago
+LICENSE
+Initial commit
+2 months ago
+Makefile
+Select alternate data path with `container system start --app-root pa…
+last week
+Package.resolved
+Adds container builder rm alias. (#505)
+15 hours ago
+Package.swift
+Native Builder: DiffKey and Differ Procol (#482)
+4 days ago
+Protobuf.Makefile
+Update protos and add builder shim version in Package.swift (#176)
+2 months ago
+README.md
+Clarify macOS version support and minor style tweaks (#485)
+5 days ago
+SECURITY.md
+Remove local CoC and MD updates (#29)
+2 months ago
+licenserc.toml
+Initial commit
+2 months ago
+Repository files navigation
+README
+Code of conduct
+Contributing
+Apache-2.0 license
+Security
+container
+
+container is a tool that you can use to create and run Linux containers as lightweight virtual machines on your Mac. It's written in Swift, and optimized for Apple silicon.
+
+The tool consumes and produces OCI-compatible container images, so you can pull and run images from any standard container registry. You can push images that you build to those registries as well, and run the images in any other OCI-compatible application.
+
+container uses the Containerization Swift package for low level container, image, and process management.
+
+introductory movie showing some basic commands
+
+Get started
+
+Requirements
+
+You need a Mac with Apple silicon to run container. To build it, see the BUILDING document.
+
+container is supported on macOS 26, since it takes advantage of new features and enhancements to virtualization and networking in this release. We do not support older versions of macOS and the container maintainers typically will not address issues that cannot be reproduced on the latest macOS 26 beta.
+
+Install or upgrade
+
+If you're upgrading, first uninstall your existing container while preserving your user data:
+
+uninstall-container.sh -k
+Download the latest signed installer package for container from the GitHub release page.
+
+To install the tool, double-click the package file and follow the instructions. Enter your administrator password when prompted, to give the installer permission to place the installed files under /usr/local.
+
+Start the system service with:
+
+container system start
+Uninstall
+
+Use the uninstall-container.sh script to remove container from your system. To remove your user data along with the tool, run:
+
+uninstall-container.sh -d
+To retain your user data so that it is available should you reinstall later, run:
+
+uninstall-container.sh -k
+Next steps
+
+Take a guided tour of container by building, running, and publishing a simple web server image.
+Learn how to use various container features.
+Read a brief description and technical overview of container.
+Build and run container on your own development system.
+View the project API documentation.
+Contributing
+
+Contributions to container are welcomed and encouraged. Please see our main contributing guide for more information.
+
+Project Status
+
+The container project is currently under active development. Its stability, both for consuming the project as a Swift package and the container tool, is only guaranteed within patch versions, such as between 0.1.1 and 0.1.2. Minor version number releases may include breaking changes until we achieve a 1.0.0 release.
+About
+
+A tool for creating and running Linux containers using lightweight virtual machines on a Mac. It is written in Swift, and optimized for Apple silicon.
+
+apple.github.io/container/documentation/
+Resources
+ Readme
+License
+ Apache-2.0 license
+Code of conduct
+ Code of conduct
+Contributing
+ Contributing
+Security policy
+ Security policy
+ Activity
+ Custom properties
+Stars
+ 18.7k stars
+Watchers
+ 86 watching
+Forks
+ 400 forks
+Report repository
+Releases 3
+
+0.3.0
+Latest
+2 weeks ago
++ 2 releases
+Packages
+
+No packages published
+Contributors
+41
+
+ @katiewasnothere
+ @jglogan
+ @dkovba
+ @adityaramani
+ @dcantah
+ @wlan0
+ @egernst
+ @heckj
+ @Reneechang17
+ @crosbymichael
+ @eliseomartelli
+ @mavenugo
+ @pstoeckle
+ @parispittman
++ 27 contributors
+Deployments
+9
+
+ github-pages 2 months ago
++ 8 deployments
+Languages
+
+Swift
+99.0%
+ 
+Other
+1.0%
+Footer
+© 2025 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact
+Manage cookies
+Do not share my personal information

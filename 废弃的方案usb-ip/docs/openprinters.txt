@@ -1,0 +1,39 @@
+
+OpenPrintingNews and EventsProjectsDownloadsDriverlessDatabasePrintersDriversContact UsDonations
+OpenPrinting Drivers foo2xqx
+
+ 	
+foo2xqx	
+ 	
+This driver is free software.
+Type: Filter	
+ 	
+Comments
+
+This driver is available in the Ghostscript Printer Application
+
+This is a driver developed for the HP LaserJet M1005 MFP and similar printers.
+
+PPD files (and the Foomatic XML files to generate them) come with the driver, therefore we do not supply PPDs here on the OpenPrinting site.
+
+ 
+
+Printer list
+
+Generic GDI Printer
+HP LaserJet M1005 MFP
+HP LaserJet M1120 MFP
+HP LaserJet P1005
+HP LaserJet P1006
+HP LaserJet P1007
+HP LaserJet P1008
+HP LaserJet P1505
+HP LaserJet P1505n
+HP LaserJet P2014
+HP LaserJet P2014n
+HP LaserJet Professional M1212nf MFP
+  
+
+Copyright 2013 Linux Foundation. All rights reserved.
+LSB is a trademark of the Linux Foundation. Linux is a registered trademark of Linus Torvalds.
+Please see our privacy policy.
