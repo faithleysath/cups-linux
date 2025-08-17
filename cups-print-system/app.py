@@ -17,6 +17,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['CONVERTED_FOLDER'] = CONVERTED_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16 MB max file size
 
+# 确保上传和转换目录在应用启动时就存在
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+if not os.path.exists(CONVERTED_FOLDER):
+    os.makedirs(CONVERTED_FOLDER)
+
 # --- 辅助函数 ---
 
 def convert_if_needed(filepath, original_filename):
@@ -211,9 +217,4 @@ def send_static(path):
     return send_from_directory('static', path)
 
 if __name__ == '__main__':
-    # 确保上传和转换目录都存在
-    if not os.path.exists(UPLOAD_FOLDER):
-        os.makedirs(UPLOAD_FOLDER)
-    if not os.path.exists(CONVERTED_FOLDER):
-        os.makedirs(CONVERTED_FOLDER)
     app.run(host='0.0.0.0', port=5000, debug=True)
