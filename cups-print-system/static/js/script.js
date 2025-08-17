@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const printForm = document.getElementById('printForm');
     const statusDiv = document.getElementById('status');
     const submitBtn = document.getElementById('submitBtn');
+    const optionsContainer = document.getElementById('printer-options-container');
 
     // 1. 获取并填充打印机列表
     fetch('/api/printers')
@@ -27,7 +28,70 @@ document.addEventListener('DOMContentLoaded', function() {
             showStatus('加载打印机列表失败，请检查后端服务是否正常。', 'error');
         });
 
-    // 2. 处理表单提交
+    // 2. 当用户选择打印机时，获取该打印机的选项
+    printerSelect.addEventListener('change', function() {
+        optionsContainer.innerHTML = ''; // 清空旧选项
+        const printerName = this.value;
+
+        if (!printerName) {
+            return;
+        }
+
+        fetch(`/api/printers/${encodeURIComponent(printerName)}/options`)
+            .then(response => response.json())
+            .then(options => {
+                if (options.error) {
+                    showStatus(`获取打印机选项失败: ${options.error}`, 'error');
+                    return;
+                }
+                
+                // 动态创建选项UI
+                createSelectOption('media', '纸张大小', options.media);
+                createSelectOption('quality', '打印质量', options.quality);
+                createSelectOption('sides', '单/双面', options.sides);
+                
+                // 为色彩模式创建特殊的选项
+                if (options.color_mode) {
+                    const colorOptions = ['monochrome', 'color'];
+                    createSelectOption('print-color-mode', '色彩模式', colorOptions);
+                }
+            })
+            .catch(err => {
+                console.error('Error fetching printer options:', err);
+                showStatus('获取打印机选项失败。', 'error');
+            });
+    });
+    
+    // 辅助函数：创建下拉选择菜单
+    function createSelectOption(name, labelText, values) {
+        if (!values || values.length === 0) {
+            return;
+        }
+
+        const formGroup = document.createElement('div');
+        formGroup.className = 'form-group';
+
+        const label = document.createElement('label');
+        label.htmlFor = name;
+        label.textContent = labelText;
+
+        const select = document.createElement('select');
+        select.id = name;
+        select.name = name;
+
+        values.forEach(value => {
+            const option = document.createElement('option');
+            option.value = value;
+            option.textContent = value;
+            select.appendChild(option);
+        });
+
+        formGroup.appendChild(label);
+        formGroup.appendChild(select);
+        optionsContainer.appendChild(formGroup);
+    }
+
+    // 3. 处理表单提交
     printForm.addEventListener('submit', function(event) {
         event.preventDefault();
         

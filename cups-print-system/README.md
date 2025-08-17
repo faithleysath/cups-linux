@@ -6,7 +6,7 @@
 
 - **Web 界面上传**: 简洁的前端页面，支持文件上传。
 - **动态打印机列表**: 自动从 CUPS 读取并显示可用的打印机。
-- **通用格式支持**: 自动将 Word (`.doc`, `.docx`) 和图片 (`.jpg`, `.png`) 文件转换为打印机可识别的 PDF 格式。
+- **通用格式支持**: 自动将 Word (`.doc`, `.docx`) 文件转换为 PDF。其他常见格式（PDF, 图片, 文本）可由 CUPS 直接处理。
 - **打印参数设置**: 支持设置打印份数。
 - **实时状态反馈**: 提交打印后，前端会轮询并显示打印任务的状态。
 - **无客户端驱动**: 所有打印处理均在服务器端完成。
@@ -15,7 +15,7 @@
 
 - **后端**: Python (Flask) + pycups
 - **前端**: 原生 HTML, CSS, JavaScript
-- **文件转换**: LibreOffice (用于 Office 文档), Pillow (用于图片)
+- **文件转换**: LibreOffice (仅用于 Word 文档)
 
 ## 部署要求
 
@@ -25,8 +25,11 @@
 2.  **Python 3.x 环境**: 需要 Python 3.6 或更高版本。
 3.  **LibreOffice**: 用于将 Word 文档转换为 PDF。
     - 在 Debian/Ubuntu 上安装: `sudo apt-get update && sudo apt-get install -y libreoffice`
-4.  **CUPS 开发库**: `pycups` 库需要 `libcups2-dev`。
+4.  **Python 开发头文件**: `pycups` 编译时需要。
+    - 在 Debian/Ubuntu 上安装: `sudo apt-get install -y python3-dev`
+5.  **CUPS 开发库**: `pycups` 库需要 `libcups2-dev`。
     - 在 Debian/Ubuntu 上安装: `sudo apt-get install -y libcups2-dev`
+6.  **网络访问**: 服务器的 5000 端口（或您配置的其他端口）需要对局域网内的用户开放。
 5.  **网络访问**: 服务器的 5000 端口（或您配置的其他端口）需要对局域网内的用户开放。
 
 ## 安装与运行
@@ -70,10 +73,9 @@ gunicorn --workers 4 --bind 0.0.0.0:5000 app:app
 1.  **文件上传**: 用户在 Web 页面选择文件、打印机和份数。
 2.  **后端接收**: Flask 后端接收文件并将其保存到 `uploads/` 临时目录。
 3.  **格式转换**:
-    - 如果文件是 `.doc` 或 `.docx`，系统调用 `libreoffice` 将其转换为 PDF。
-    - 如果是图片，系统使用 `Pillow` 库将其转换为 PDF。
-    - 如果已经是 PDF，则跳过此步骤。
-4.  **提交打印**: 后端使用 `pycups` 库将转换后的 PDF 文件提交到用户选择的 CUPS 打印机队列。
+    - **仅在需要时转换**: 只有当文件是 `.doc` 或 `.docx` 时，系统才会调用 `libreoffice` 将其转换为 PDF。
+    - **直接提交**: 对于所有其他支持的格式（PDF, JPG, PNG, TXT），文件将直接被提交给 CUPS。
+4.  **提交打印**: 后端使用 `pycups` 库将文件提交到用户选择的 CUPS 打印机队列。
 5.  **状态反馈**: 前端获取任务 ID 后，会定期向后端查询该任务的状态，并将结果（如 `processing`, `completed`, `error`）显示给用户。
 
 ## 注意事项
